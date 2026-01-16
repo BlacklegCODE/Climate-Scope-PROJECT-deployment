@@ -63,11 +63,7 @@ except ImportError:
 st.set_page_config(page_title="ClimateScope", page_icon="🌍", layout="wide")
 
 from pathlib import Path
-
 DATA_PATH = Path(__file__).resolve().parent / "GlobalWeatherRepository_cleaned.csv.gz"
-
-df = pd.read_csv(DATA_PATH  / "GlobalWeatherRepository_cleaned.csv")
-
 
 
 # Column mapping dictionary for flexible data loading
@@ -131,52 +127,25 @@ def add_missing_columns(df):
 
 
 @st.cache_data
-@st.cache_data
-def handle_missing_values(df):
-    return df
 def load_data(uploaded_file=None):
     """Load and perform initial data processing"""
-    # Load CSV (uploaded or default)
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
     else:
-        df = pd.read_csv(PROCESSED_DATA_PATH / "GlobalWeatherRepository_cleaned.csv")
+        df = pd.read_csv(DATA_PATH, compression="gzip")
 
-    # ALWAYS try smart mapping (case-insensitive) and add missing columns
     df, mapping_applied = smart_column_mapping(df)
     df, added_columns = add_missing_columns(df)
-
-    # show mapping info if running in Streamlit
-    try:
-        if mapping_applied:
-            st.sidebar.success(f"✅ Mapped {len(mapping_applied)} columns automatically")
-        if added_columns:
-            st.sidebar.info(f"ℹ️ Added {len(added_columns)} missing columns with defaults")
-    except Exception:
-        pass
-
-    # Ensure canonical column aliases exist (pm25, pm2_5, etc -> air_quality_pm2.5)
     df = ensure_canonical_columns(df)
-
-    # Handle missing values
     df = handle_missing_values(df)
 
-    # Convert date column to datetime
     df['last_updated_dt'] = pd.to_datetime(df.get('last_updated', df.get('last_updated_dt')), errors='coerce')
-
-    # Ensure date column exists
     if 'date' not in df.columns:
         df['date'] = df['last_updated_dt'].dt.date
 
-    # Clean inconsistent columns
     df = clean_inconsistent_columns(df)
-
-    # Rename variables for clarity
     df = rename_variables_for_clarity(df)
-
     return df
-
-
 
 def ensure_canonical_columns(df):
     """Map common aliases to canonical column names so code can safely use canonical names."""
@@ -2859,6 +2828,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
