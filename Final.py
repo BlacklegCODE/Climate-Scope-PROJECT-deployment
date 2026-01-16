@@ -63,8 +63,8 @@ except ImportError:
 st.set_page_config(page_title="ClimateScope", page_icon="🌍", layout="wide")
 
 from pathlib import Path
-DATA_PATH = Path(__file__).resolve().parent / "GlobalWeatherRepository_cleaned.csv.gz"
-df = pd.read_csv(DATA_PATH)   # pandas auto-detects .gz
+PROCESSED_DATA_PATH = Path(__file__).resolve().parent / "GlobalWeatherRepository_cleaned.csv.gz"
+df = pd.read_csv(PROCESSED_DATA_PATH)   # pandas auto-detects .gz
 
 # Column mapping dictionary for flexible data loading
 COLUMN_MAPPINGS = {
@@ -2855,3 +2855,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
