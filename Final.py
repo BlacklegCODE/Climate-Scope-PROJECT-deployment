@@ -66,7 +66,7 @@ from pathlib import Path
 
 DATA_PATH = Path(__file__).resolve().parent / "GlobalWeatherRepository_cleaned.csv.gz"
 
-df = pd.read_csv(PROCESSED_DATA_PATH / "GlobalWeatherRepository_cleaned.csv")
+df = pd.read_csv(DATA_PATH  / "GlobalWeatherRepository_cleaned.csv")
 
 
 
@@ -2859,5 +2859,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
