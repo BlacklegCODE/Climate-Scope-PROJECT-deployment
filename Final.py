@@ -2839,13 +2839,14 @@ def main():
     st.markdown("---")
     st.markdown("""
         <div style='text-align: center; color: #666;'>
-            <p>ClimateScope | 107,573 Records | 211 Countries | Author: Naman</p>
+            <p>ClimateScope | 107,573 Records | 211 Countries | Author: Harsh Raundal</p>
         </div>
     """, unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
     main()
+
 
 
 
