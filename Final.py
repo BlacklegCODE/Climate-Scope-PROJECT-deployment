@@ -125,7 +125,25 @@ def add_missing_columns(df):
 
     return df, added_columns
 
+def handle_missing_values(df):
+    """Handle missing values safely"""
+    df = df.copy()
 
+    # Numeric columns → fill with median
+    numeric_cols = df.select_dtypes(include=['number']).columns
+    for col in numeric_cols:
+        df[col] = df[col].fillna(df[col].median())
+
+    # Non-numeric columns → fill with mode
+    non_numeric_cols = df.select_dtypes(exclude=['number']).columns
+    for col in non_numeric_cols:
+        if not df[col].mode().empty:
+            df[col] = df[col].fillna(df[col].mode()[0])
+        else:
+            df[col] = df[col].fillna("Unknown")
+
+    return df
+#load data
 @st.cache_data
 def load_data(uploaded_file=None):
     """Load and perform initial data processing"""
@@ -2828,6 +2846,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
